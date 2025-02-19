@@ -1,21 +1,29 @@
 .glow-container {
-  --spread: 60;
+  --spread: 40;
+  position: relative;
+  overflow: hidden;
 }
 
 .glow-card {
   --active: 0.15;
   --start: 0;
-}
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
 
-.glow-card:is(:hover, :focus-visible) {
-  z-index: 2;
+  &:hover {
+    --active: 0.3;
+    transform: translateY(-2px);
+  }
 }
 
 .glows {
-  pointer-events: none;
   position: absolute;
-  inset: 0;
-  filter: blur(calc(var(--blur) * 1px));
+  inset: -150%;
+  rotate: 0deg;
+  animation: rotate 7s linear infinite;
 }
 
 .glows::after,
@@ -23,74 +31,36 @@
   --alpha: 0;
   content: "";
   background: conic-gradient(from 180deg at 50% 70%,
-      #f626af 0deg,
-      #8228ec 72.0000010728836deg,
-      #f626af 144.0000021457672deg,
-      #0025ba 216.00000858306885deg,
-      #f626af 288.0000042915344deg,
-      #fafafa 1turn);
-  background-attachment: fixed;
-  position: absolute;
-  inset: -5px;
-  border: 8px solid transparent;
-  border-radius: 12px;
-  mask: linear-gradient(#0000, #0000),
-    conic-gradient(from calc((var(--start) - (var(--spread) * 0.5)) * 1deg),
-      #000 0deg,
-      #fff,
-      #0000 calc(var(--spread) * 1deg));
-  mask-composite: intersect;
-  mask-clip: padding-box, border-box;
-  opacity: var(--active);
-  transition: opacity 1s;
-}
-
-.glow-card::before {
+      #00ff95 0deg,
+      #0066ff 72deg,
+      #00ff95 144deg,
+      #004db3 216deg,
+      #00ff95 288deg,
+      #ffffff 1turn
+  );
   position: absolute;
   inset: 0;
-  border: 2px solid transparent;
-  content: "";
-  border-radius: 12px;
-  pointer-events: none;
-  background: #84738c;
-  background-attachment: fixed;
-  border-radius: 12px;
-  mask: linear-gradient(#0000, #0000),
-    conic-gradient(from calc(((var(--start) + (var(--spread) * 0.25)) - (var(--spread) * 1.5)) * 1deg),
-      #ffffff26 0deg,
-      white,
-      #ffffff26 calc(var(--spread) * 2.5deg));
-  mask-clip: padding-box, border-box;
-  mask-composite: intersect;
+  z-index: -1;
+  filter: blur(calc(var(--spread) * 1px));
   opacity: var(--active);
-  transition: opacity 1s;
+  transition: opacity 0.3s;
+  animation: fade-in 0.5s ease forwards;
 }
 
-.glow-card::after {
-  --bg-size: 100%;
-  content: "";
-  pointer-events: none;
-  position: absolute;
-  background: conic-gradient(from 180deg at 50% 70%,
-      #f626af 0deg,
-      #8228ec 72.0000010728836deg,
-      #f626af 144.0000021457672deg,
-      #0025ba 216.00000858306885deg,
-      #f626af 288.0000042915344deg,
-      #fafafa 1turn);
-  background-attachment: fixed;
-  border-radius: 12px;
-  opacity: var(--active, 0);
-  transition: opacity 1s;
-  --alpha: 0;
-  inset: 0;
-  border: 2px solid transparent;
-  mask: linear-gradient(#0000, #0000),
-    conic-gradient(from calc(((var(--start) + (var(--spread) * 0.25)) - (var(--spread) * 0.5)) * 1deg),
-      #0000 0deg,
-      #fff,
-      #0000 calc(var(--spread) * 0.5deg));
-  filter: brightness(1.5);
-  mask-clip: padding-box, border-box;
-  mask-composite: intersect;
+@keyframes rotate {
+  from {
+    rotate: 0deg;
+  }
+  to {
+    rotate: 360deg;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    --alpha: 0;
+  }
+  to {
+    --alpha: 1;
+  }
 }
